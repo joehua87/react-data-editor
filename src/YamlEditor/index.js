@@ -41,6 +41,19 @@ class YamlEditor extends React.Component<YamlEditorProps, any> {
     }
   }
 
+  componentWillReceiveProps({ data }: YamlEditorProps) {
+    if (data !== this.props.data) {
+      const path = this.props.path || this.state.path
+      const { keys, ymlValue } = this.getSelectedData(path, data)
+      this.setState({
+        path,
+        keys,
+        ymlValue,
+        pristine: true,
+      })
+    }
+  }
+
   commands = [
     {
       name: 'onSubmit',
@@ -54,8 +67,12 @@ class YamlEditor extends React.Component<YamlEditorProps, any> {
     },
   ]
 
-  getSelectedData = (path: string[]): { keys: string[], ymlValue: string } => {
-    const selectedData = dotProp.get(this.props.data, path)
+  /*
+   * path: path to change
+   * data: in case when we need to get selected data when props changed (via componentWillReceiveProps)
+   */
+  getSelectedData = (path: string[], data?: any): { keys: string[], ymlValue: string } => {
+    const selectedData = dotProp.get(data || this.props.data, path)
     const ymlValue = yaml.stringify(selectedData)
     const keys = Object.keys(selectedData).filter(
       key => typeof selectedData[key] === 'object',
