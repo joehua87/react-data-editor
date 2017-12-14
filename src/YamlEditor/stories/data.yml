@@ -1,0 +1,73 @@
+type: ImageItem
+theme:
+  root: 'flex flex-wrap'
+  imageWrapper: 'flex justify-center items-center w-100 w-50-ns h-auto-ns vh-50 order-1-ns'
+  background: 'w-100 h-100 bg-center cover'
+  infoItemWrapper: 'w-100 w-50-ns'
+  infoItem:
+    root: 'ph4 pv4'
+    titleWrapper: null
+    title: 'rf f2 f1-ns fw5 mid-gray lh-title'
+    subtitleWrapper: mt3
+    subtitle: 'rf f5 f4-ns fw3 i lh-title'
+    descriptionWrapper: 'mv4-ns mv3'
+    description: 'pf f5 f4-ns fw4 lh-copy'
+    iconItemList:
+      root: 'flex flex-wrap'
+      itemWrapper: w-100
+      item: 'flex pb1'
+      iconWrapper: 'w-10 flex flex-none pr2'
+      icon: 'f4 mid-gray justify-center'
+      titleWrapper: null
+      title: ""
+      descriptionWrapper: 'flex-auto mid-gray lh-copy'
+      description: 'pf f5 f4-ns fw4'
+    actions:
+      action:
+        root: 'pointer pv2 ph4 bg-rc hover-bg-rc-light white-90 link hover-rc br-pill'
+        icon: 'mr1 f6'
+        value: 'f5 fw4 ttu pf tracked black-90'
+      root: 'mt4 mb3'
+data:
+  background: //res.cloudinary.com/buutruong/image/upload/q_50/v1510538348/23548250_1298235530282232_1817354541_n_ofqgre.jpg
+  title: 'Viên Nấm Giảm Cân X2'
+  description: 'Liệu trình tăng tốc. Dành cho các bạn muốn giảm nhanh hơn'
+  items:
+    -
+      icon: fa-cube
+      description: 'Hộp 15 gói - Gói 2 Viên - 530.000đ'
+    -
+      icon: fa-clock-o
+      description: 'Hiệu quả rõ rệt sau 1 LIỆU TRÌNH'
+    -
+      icon: fa-thumbs-up
+      description: 'Có thể giảm 5kg trong 1 tháng'
+    -
+      icon: fa-gift
+      description: 'Tặng kèm Mặt Nạ Tinh Thể Bạch Ngọc'
+    -
+      icon: fa-motorcycle
+      description: 'Freeship Toàn Quốc'
+  actions:
+    -
+      icon: null
+      value: 'Mua Nấm Ngay'
+      link:
+        to: dat-hang
+        isScroll: true
+        smooth: true
+sectionData:
+  showHr: false
+  overlayColor: 'rgba(0, 0, 0, 0)'
+  subtitle: ""
+  title: ""
+  subtitleEle: h4
+  titleEle: h3
+  useHeader: false
+sectionTheme:
+  body: null
+  hr: ""
+  subtitle: ""
+  title: ""
+  header: ""
+  root: bg-near-white

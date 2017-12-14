@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react'
+import Loadable from 'react-loadable'
 import cn from 'classnames'
 import dotProp from 'dot-prop-immutable'
 import AceEditor from 'AceEditor'
@@ -9,10 +10,19 @@ import yaml from '../yaml'
 type YamlEditorProps = {
   data: any,
   onDataChange: Function,
+  path?: string[],
+  onPathChange?: Function,
   submitBindKey?: { win: string, mac: string },
   cancelBindKey?: { win: string, mac: string },
   className?: string,
 }
+
+const Tag = Loadable({
+  loader: () => import('antd/lib/tag'),
+  loading: () => null,
+  delay: 200,
+  timeout: 10000,
+})
 
 class YamlEditor extends React.Component<YamlEditorProps, any> {
   static defaultProps = {
@@ -58,6 +68,7 @@ class YamlEditor extends React.Component<YamlEditorProps, any> {
 
   removeKey = (idx: number) => {
     const path = this.state.path.slice(0, idx)
+    if (this.props.onPathChange) this.props.onPathChange(path)
     const { keys, ymlValue } = this.getSelectedData(path)
     this.setState({
       key: '',
@@ -71,6 +82,7 @@ class YamlEditor extends React.Component<YamlEditorProps, any> {
     const key = e.target.value
     if (!key) return
     const path = [...this.state.path, key]
+    if (this.props.onPathChange) this.props.onPathChange(path)
     const { keys, ymlValue } = this.getSelectedData(path)
     this.setState({
       key,
@@ -98,23 +110,37 @@ class YamlEditor extends React.Component<YamlEditorProps, any> {
     this.setState({ ymlValue, pristine: true })
   }
 
+  renderNavContent = () => {
+    const { key, keys, pristine } = this.state
+    const path = this.props.path || this.state.path
+    return (
+      <React.Fragment>
+        <div className="flex flex-wrap">
+          {!pristine && <div className="mr2">*</div>}
+          {path.map((k, idx) => (
+            <Tag key={idx} closable onClose={() => this.removeKey(idx)}>
+              {k}
+            </Tag>
+          ))}
+          <select value={key} onChange={this.onKeySelect} disabled={!pristine}>
+            <option value="">Select</option>
+            {keys.map(k => (
+              <option key={k} value={k}>
+                {k}
+              </option>
+            ))}
+          </select>
+        </div>
+      </React.Fragment>
+    )
+  }
+
   render() {
-    const { path, ymlValue, key, keys, pristine } = this.state
+    const { ymlValue } = this.state
     return (
       <div className={cn('flex flex-column', this.props.className)}>
         <div className="flex-none pa2 bb b--light-gray">
-          <div className="flex">
-            {path.map((k, idx) => (
-              <div>
-                {k} <button onClick={() => this.removeKey(idx)}>Remove</button>
-              </div>
-            ))}
-          </div>
-          <select value={key} onChange={this.onKeySelect} disabled={!pristine}>
-            <option value="">Select</option>
-            {keys.map(k => <option value={k}>{k}</option>)}
-          </select>
-          <div>{!pristine && '*'}</div>
+          {this.renderNavContent()}
         </div>
         <div className="flex-auto relative">
           <div className="absolute absolute--fill">
