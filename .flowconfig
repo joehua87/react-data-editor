@@ -1,0 +1,22 @@
+[ignore]
+.*/node_modules/conventional-changelog-core/test/fixtures/_malformation.json
+.*/node_modules/react-progressive-image/index.js
+.*/node_modules/.*.js.flow
+.*/node_modules/findup/.*.json
+.*/node_modules/rc-util/lib/PureRenderMixin.js
+
+[include]
+
+[libs]
+
+[options]
+suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
+unsafe.enable_getters_and_setters=true
+esproposal.export_star_as=enable
+
+module.system=haste
+module.system.node.resolve_dirname=src
+module.system.node.resolve_dirname=node_modules
+
+module.name_mapper='.*\.ya?ml$' -> 'YmlModule'
+module.name_mapper='.*\.gql$' -> 'GraphqlModule'
