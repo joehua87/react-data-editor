@@ -24,6 +24,27 @@ const Tag = Loadable({
   timeout: 10000,
 })
 
+function YamlError({
+  error,
+}: {
+  error: {
+    message: string,
+    parsedLine: number,
+    snippet: string,
+  }
+}) {
+  const {
+    message,
+    parsedLine,
+    snippet,
+  } = error
+  return (
+    <div className="dark-red f7">
+      <div>{message} (Line {parsedLine}). Snippet: <code className="dark-green">{snippet}</code></div>
+    </div>
+  )
+}
+
 class YamlEditor extends React.Component<YamlEditorProps, any> {
   static defaultProps = {
     submitBindKey: { win: 'Ctrl-S', mac: 'Command-S' },
@@ -38,6 +59,7 @@ class YamlEditor extends React.Component<YamlEditorProps, any> {
       keys,
       ymlValue,
       pristine: true,
+      error: null,
     }
   }
 
@@ -115,11 +137,15 @@ class YamlEditor extends React.Component<YamlEditorProps, any> {
 
   submitYmlChange = () => {
     const { path, ymlValue } = this.state
-    const selectedData = yaml.parse(ymlValue)
-    const data = dotProp.set(this.props.data, path, selectedData)
-    this.setState({ pristine: true }, () => {
-      this.props.onDataChange(data)
-    })
+    try {
+      const selectedData = yaml.parse(ymlValue)
+      const data = dotProp.set(this.props.data, path, selectedData)
+      this.setState({ pristine: true, error: null }, () => {
+        this.props.onDataChange(data)
+      })
+    } catch (error) {
+      this.setState({ error })
+    }
   }
 
   cancelYmlChange = () => {
@@ -168,6 +194,11 @@ class YamlEditor extends React.Component<YamlEditorProps, any> {
             />
           </div>
         </div>
+        {this.state.error && (
+          <div className="flex-none pa2 bb b--light-gray">
+            <YamlError error={this.state.error} />
+          </div>
+        )}
       </div>
     )
   }
